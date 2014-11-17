@@ -10,4 +10,43 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
-# Customize to your needs...
+# Aliases
+alias core="ghc -O2 -ddump-simpl -ddump-to-file -dsuppress-idinfo -dsuppress-module-prefixes -dsuppress-uniques -dsuppress-coercions -dsuppress-type-applications -fforce-recomp"
+alias cower="cower --color=auto"
+alias mplayer="mplayer -msgcolor -really-quiet"
+alias mu='mupdf'
+alias pacdep="comm -23 <(pacman -Qdq|sort) <(pacman -Qgq base base-devel|sort)"
+alias pacexp="comm -23 <(pacman -Qeq|sort) <(pacman -Qgq base base-devel|sort)"
+alias xrefresh="xrdb -load $HOME/.Xresources"
+
+alias dvorak='setxkbmap dvorak'
+alias h.soav='setxkbmap dvorak'
+alias qwerty='setxkbmap us'
+
+unsetopt correct
+unsetopt correct_all
+
+function aur() {
+    cower --color=auto -ddf $HOME/builds/$1
+}
+
+function dict() {
+    if [[ $1 == (d|m) ]]; then
+        curl -silent dict://dict.org/$1:$2 | $PAGER
+    else
+        echo 'Unknown command. Use (d)efine or (m)atch'
+    fi
+}
+
+function man() {
+    env \
+        LESS_TERMCAP_mb=$(printf "\e[1;31m") \
+        LESS_TERMCAP_md=$(printf "\e[1;31m") \
+        LESS_TERMCAP_me=$(printf "\e[0m") \
+        LESS_TERMCAP_se=$(printf "\e[0m") \
+        LESS_TERMCAP_so=$(printf "\e[1;44;33m") \
+        LESS_TERMCAP_ue=$(printf "\e[0m") \
+        LESS_TERMCAP_us=$(printf "\e[1;32m") \
+    man "$@"
+}
+>>>>>>> getting comfy
