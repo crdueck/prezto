@@ -14,6 +14,7 @@ eval "$(fasd --init auto)"
 
 # Aliases
 alias core="ghc -O2 -ddump-simpl -ddump-to-file -dsuppress-idinfo -dsuppress-module-prefixes -dsuppress-uniques -dsuppress-coercions -dsuppress-type-applications -fforce-recomp"
+alias cower="cower --color=auto"
 alias mu='mupdf'
 alias sx='sxiv'
 alias xc='xclip -sel clip'
@@ -29,6 +30,8 @@ alias pacexp="comm -23 <(pacman -Qeq|sort) <(pacman -Qgq base base-devel|sort)"
 alias shutdown="systemctl poweroff"
 alias reboot="systemctl reboot"
 
+# Keyboard
+alias dvorak='setxkbmap dvorak'
 alias h.soav='setxkbmap dvorak'
 
 bindkey -M viins '^r' history-incremental-search-backward
