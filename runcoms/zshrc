@@ -13,25 +13,21 @@ fi
 # Aliases
 alias core="ghc -O2 -ddump-simpl -ddump-to-file -dsuppress-idinfo -dsuppress-module-prefixes -dsuppress-uniques -dsuppress-coercions -dsuppress-type-applications -fforce-recomp"
 alias cower="cower --color=auto"
+alias mp='mplayer'
 alias mu='mupdf'
 alias pacdep="comm -23 <(pacman -Qdq|sort) <(pacman -Qgq base base-devel|sort)"
 alias pacexp="comm -23 <(pacman -Qeq|sort) <(pacman -Qgq base base-devel|sort)"
+alias xc='xclip -sel clip'
 
-# Keyboard
-alias dvorak='setxkbmap dvorak'
-alias h.soav='setxkbmap dvorak'
-alias qwerty='setxkbmap us'
-
-# Git
-alias gs="git status"
-alias ga="git add"
-alias gcm="git commit -m"
-alias gco="git checkout"
+bindkey -M viins '^r' history-incremental-search-backward
+bindkey -M vicmd '^r' history-incremental-search-backward
 
 setopt NO_FLOW_CONTROL
 
 unsetopt CORRECT
 unsetopt CORRECT_ALL
+
+eval "$(fasd --init auto)"
 
 function aur() {
     cower --color=auto -ddf $HOME/builds/$1
