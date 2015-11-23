@@ -15,7 +15,6 @@ eval "$(fasd --init auto)"
 # Aliases
 alias core="ghc -O2 -ddump-simpl -ddump-to-file -dsuppress-idinfo -dsuppress-module-prefixes -dsuppress-uniques -dsuppress-coercions -dsuppress-type-applications -fforce-recomp"
 alias cower="cower --color=auto"
-alias mp='mplayer'
 alias mu='mupdf'
 alias sx='sxiv'
 alias xc='xclip -sel clip'
