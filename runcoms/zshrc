@@ -30,7 +30,7 @@ unsetopt CORRECT_ALL
 eval "$(fasd --init auto)"
 
 function aur() {
-    cower --color=auto -ddf $HOME/builds/$1
+    cower --color=auto -ddf "$1" -t $HOME/builds
 }
 
 function dict() {
