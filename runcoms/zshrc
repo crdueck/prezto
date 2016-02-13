@@ -40,6 +40,10 @@ unsetopt CORRECT_ALL
 
 eval "$(fasd --init auto)"
 
+function twitch() {
+    livestreamer twitch.tv/"$1" best --player mpv
+}
+
 function aur() {
     cower --color=auto -ddf "$1" -t $HOME/builds
 }
