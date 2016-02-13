@@ -14,18 +14,25 @@ eval "$(fasd --init auto)"
 
 # Aliases
 alias core="ghc -O2 -ddump-simpl -ddump-to-file -dsuppress-idinfo -dsuppress-module-prefixes -dsuppress-uniques -dsuppress-coercions -dsuppress-type-applications -fforce-recomp"
-alias cower="cower --color=auto"
 alias mu='mupdf'
 alias sx='sxiv'
 alias xc='xclip -sel clip'
-
 alias v='fasd -e vim -f'
 
 # archlinux
 alias cower="cower --color=auto"
 alias pacdep="comm -23 <(pacman -Qdq|sort) <(pacman -Qgq base base-devel|sort)"
 alias pacexp="comm -23 <(pacman -Qeq|sort) <(pacman -Qgq base base-devel|sort)"
-alias xc='xclip -sel clip'
+
+# git
+alias ga="git add"
+alias gap="git add -p"
+
+# systemd
+alias shutdown="systemctl poweroff"
+alias reboot="systemctl reboot"
+
+alias h.soav='setxkbmap dvorak'
 
 bindkey -M viins '^r' history-incremental-search-backward
 bindkey -M vicmd '^r' history-incremental-search-backward
