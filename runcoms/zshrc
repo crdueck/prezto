@@ -19,14 +19,12 @@ alias sx='sxiv'
 alias xc='xclip -sel clip'
 alias v='fasd -e vim -f'
 
+alias v='fasd -e vim -f'
+
 # archlinux
 alias cower="cower --color=auto"
 alias pacdep="comm -23 <(pacman -Qdq|sort) <(pacman -Qgq base base-devel|sort)"
 alias pacexp="comm -23 <(pacman -Qeq|sort) <(pacman -Qgq base base-devel|sort)"
-
-# git
-alias ga="git add"
-alias gap="git add -p"
 
 # systemd
 alias shutdown="systemctl poweroff"
@@ -39,12 +37,6 @@ bindkey -M vicmd '^r' history-incremental-search-backward
 
 setopt   NO_FLOW_CONTROL
 unsetopt CORRECT CORRECT_ALL
-
-eval "$(fasd --init auto)"
-
-function twitch() {
-    livestreamer twitch.tv/"$1" best --player mpv
-}
 
 function aur() {
     cower --color=auto -ddf "$1" -t $HOME/tmp
