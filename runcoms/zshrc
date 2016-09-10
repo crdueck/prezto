@@ -10,19 +10,20 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
+eval "$(fasd --init auto)"
+
 # Aliases
 alias core="ghc -O2 -ddump-simpl -ddump-to-file -dsuppress-idinfo -dsuppress-module-prefixes -dsuppress-uniques -dsuppress-coercions -dsuppress-type-applications -fforce-recomp"
 alias mu='mupdf'
+alias sx='sxiv'
 alias xc='xclip -sel clip'
+
+alias v='fasd -e vim -f'
 
 # archlinux
 alias cower="cower --color=auto"
 alias pacdep="comm -23 <(pacman -Qdq|sort) <(pacman -Qgq base base-devel|sort)"
 alias pacexp="comm -23 <(pacman -Qeq|sort) <(pacman -Qgq base base-devel|sort)"
-
-# git
-alias ga="git add"
-alias gap="git add -p"
 
 # systemd
 alias shutdown="systemctl poweroff"
@@ -33,19 +34,11 @@ alias h.soav='setxkbmap dvorak'
 bindkey -M viins '^r' history-incremental-search-backward
 bindkey -M vicmd '^r' history-incremental-search-backward
 
-setopt NO_FLOW_CONTROL
-
-unsetopt CORRECT
-unsetopt CORRECT_ALL
-
-eval "$(fasd --init auto)"
-
-function twitch() {
-    livestreamer twitch.tv/"$1" best --player mpv
-}
+setopt   NO_FLOW_CONTROL
+unsetopt CORRECT CORRECT_ALL
 
 function aur() {
-    cower --color=auto -ddf "$1" -t $HOME/builds
+    cower --color=auto -ddf "$1" -t $HOME/tmp
 }
 
 function dict() {
@@ -54,6 +47,10 @@ function dict() {
     else
         echo 'Unknown command. Use (d)efine or (m)atch'
     fi
+}
+
+function ews() {
+    $EDITOR $(git status --porcelain | awk '{print $2}')
 }
 
 function man() {
@@ -66,4 +63,8 @@ function man() {
         LESS_TERMCAP_ue=$(printf "\e[0m") \
         LESS_TERMCAP_us=$(printf "\e[1;32m") \
     man "$@"
+}
+
+function twitch() {
+    livestreamer twitch.tv/"$1" best --player mpv --player-passthrough hls
 }
