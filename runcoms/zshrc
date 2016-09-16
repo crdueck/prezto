@@ -54,6 +54,10 @@ function ews() {
     $EDITOR $(git status --porcelain | awk '{print $2}')
 }
 
+function ers() {
+    $EDITOR $(git diff-tree --name-only --no-commit-id -r "${1:-HEAD}")
+}
+
 function man() {
     env \
         LESS_TERMCAP_mb=$(printf "\e[1;31m") \
