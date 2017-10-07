@@ -14,6 +14,12 @@ if [[ "$OSTYPE" == darwin* ]]; then
 fi
 
 #
+# Desktop
+#
+
+export DESKTOP='$HOME/media/forest-bg.jpg'
+
+#
 # Editors
 #
 
