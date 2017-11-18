@@ -30,16 +30,25 @@ alias v='fasd -e vim -f'
 alias v='fasd -e vim -f'
 
 # archlinux
+alias aur="pacaur"
 alias cower="cower --color=auto"
 alias pacdep="comm -23 <(pacman -Qdq|sort) <(pacman -Qgq base base-devel|sort)"
 alias pacexp="comm -23 <(pacman -Qeq|sort) <(pacman -Qgq base base-devel|sort)"
+alias paclog="cat /var/log/pacman.log"
+alias tpb="torrench --copy -t"
 
 alias h.soav='setxkbmap dvorak'
 
+if (( $+commands[htop] )); then
+    alias top='htop'
+    alias topc='htop -s PERCENT_CPU'
+    alias topm='htop -s PERCENT_MEM'
+fi
+
 # Functions
-function aur() {
-    cower --color=auto -ddf "$1" -t $HOME/tmp
-}
+# function aur() {
+#     cower --color=auto -ddf "$1" -t $HOME/tmp
+# }
 
 function dict() {
     if [[ $1 == (d|m) ]]; then
@@ -70,5 +79,9 @@ function man() {
 }
 
 function twitch() {
-    livestreamer twitch.tv/"$1" best --player mpv --player-passthrough hls
+    streamlink twitch.tv/"$1" best --player mpv --player-passthrough hls
+}
+
+function yt() {
+    streamlink youtube.com/user/"$1" best --player mpv --player-passthrough hls
 }

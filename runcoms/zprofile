@@ -17,7 +17,7 @@ fi
 # Desktop
 #
 
-export DESKTOP='$HOME/media/forest-bg.jpg'
+export DESKTOP="$HOME"'/media/forest-bg.jpg'
 
 #
 # Editors
