@@ -27,8 +27,6 @@ alias sx='sxiv'
 alias xc='xclip -sel clip'
 alias v='fasd -e vim -f'
 
-alias v='fasd -e vim -f'
-
 # archlinux
 alias aur="pacaur"
 alias cower="cower --color=auto"
@@ -49,6 +47,18 @@ fi
 # function aur() {
 #     cower --color=auto -ddf "$1" -t $HOME/tmp
 # }
+=======
+alias cower="cower --color=auto"
+alias pacdep="comm -23 <(pacman -Qdq|sort) <(pacman -Qgq base base-devel|sort)"
+alias pacexp="comm -23 <(pacman -Qeq|sort) <(pacman -Qgq base base-devel|sort)"
+
+alias h.soav='setxkbmap dvorak'
+
+# Functions
+function aur() {
+    cower --color=auto -ddf "$1" -t $HOME/tmp
+}
+>>>>>>> 4e6afb3b1fe255316d3b1aabb94c5c403c532f5d
 
 function dict() {
     if [[ $1 == (d|m) ]]; then
