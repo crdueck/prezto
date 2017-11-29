@@ -10,4 +10,59 @@ if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/init.zsh" ]]; then
   source "${ZDOTDIR:-$HOME}/.zprezto/init.zsh"
 fi
 
-# Customize to your needs...
+eval "$(fasd --init auto)"
+
+setopt   NO_FLOW_CONTROL
+unsetopt CORRECT CORRECT_ALL
+
+bindkey -M viins '^r' history-incremental-search-backward
+bindkey -M vicmd '^r' history-incremental-search-backward
+
+# Aliases
+alias core="ghc -O2 -ddump-simpl -ddump-to-file -dsuppress-idinfo -dsuppress-module-prefixes -dsuppress-uniques -dsuppress-coercions -dsuppress-type-applications -fforce-recomp"
+alias wifi="sudo sh -c \"wpa_supplicant -B -i wlan0 -c /etc/wpa_supplicant.conf && dhcpcd wlan0\""
+
+alias mu='mupdf'
+alias sx='sxiv'
+alias xc='xclip -sel clip'
+alias v='fasd -e vim -f'
+
+# archlinux
+alias aur="pacaur"
+alias cower="cower --color=auto"
+alias pacdep="comm -23 <(pacman -Qdq|sort) <(pacman -Qgq base base-devel|sort)"
+alias pacexp="comm -23 <(pacman -Qeq|sort) <(pacman -Qgq base base-devel|sort)"
+alias paclog="cat /var/log/pacman.log"
+alias tpb="torrench --copy -t"
+
+alias h.soav='setxkbmap dvorak'
+
+if (( $+commands[htop] )); then
+    alias top='htop'
+    alias topc='htop -s PERCENT_CPU'
+    alias topm='htop -s PERCENT_MEM'
+fi
+
+function dict {
+    if [[ $1 == (d|m) ]]; then
+        curl -silent dict://dict.org/$1:$2 | $PAGER
+    else
+        echo 'Unknown command. Use (d)efine or (m)atch'
+    fi
+}
+
+function ews {
+    $EDITOR $(git status --porcelain | awk '{print $2}')
+}
+
+function ers {
+    $EDITOR $(git diff-tree --name-only --no-commit-id -r "${1:-HEAD}")
+}
+
+function twitch {
+    streamlink twitch.tv/"$1" best --player mpv --player-passthrough hls
+}
+
+function yt {
+    streamlink youtube.com/user/"$1" best --player mpv --player-passthrough hls
+}

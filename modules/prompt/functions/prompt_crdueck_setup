@@ -1,0 +1,83 @@
+#
+# A simple theme that displays relevant, contextual information.
+#
+# Displays the current git branch and indicates the presence of
+# untracked, modified, and staged files.
+#
+# Displays the current kubernetes cluster context.
+#
+
+pmodload 'helper'
+
+function prompt_k8s {
+  # TODO: run kubectl asynchronously
+  if (( $+commands[kubectl] )); then
+      _prompt_k8s=" %F{white}$(kubectl config current-context) %F{blue}%f"
+  fi
+}
+
+function prompt_pwd {
+  _prompt_pwd="%F{cyan}$(prompt-pwd)%f "
+}
+
+function prompt_vim {
+    _prompt_vim="%F{cyan}%f"
+}
+
+function prompt_precmd {
+  setopt LOCAL_OPTIONS
+  unsetopt XTRACE KSH_ARRAYS
+
+  # Initialize prompt formats.
+  prompt_k8s
+  prompt_pwd
+  prompt_vim
+
+  # Get Git repository information.
+  if (( $+functions[git-info] )); then
+    git-info
+  fi
+}
+
+function prompt_setup {
+  setopt LOCAL_OPTIONS
+  unsetopt XTRACE KSH_ARRAYS
+  prompt_opts=(cr percent subst)
+
+  autoload -Uz add-zsh-hook
+  add-zsh-hook precmd prompt_precmd
+  # TODO: update zprezto and use prompt/functions/prompt-pwd
+
+  # Set editor-info parameters.
+  zstyle ':prezto:module:editor:info:completing'       format '%F{red}...%f'
+  zstyle ':prezto:module:editor:info:keymap:primary'   format '%fλ.'
+  zstyle ':prezto:module:editor:info:keymap:alternate' format '%F{white}λ.%f'
+
+  # Set git-info parameters.
+  zstyle ':prezto:module:git:info' verbose 'no'
+
+  # PROMPT
+  zstyle ':prezto:module:git:info:action'    format ':%F{yellow}%s%f' # %s
+  zstyle ':prezto:module:git:info:ahead'     format '%F{yellow}↑%f'   # %A
+  zstyle ':prezto:module:git:info:behind'    format '%F{yellow}↓%f'   # %B
+  zstyle ':prezto:module:git:info:branch'    format '%F{blue}%b%f'    # %b
+  zstyle ':prezto:module:git:info:commit'    format '%F{blue}%.7c%f'  # %c
+  zstyle ':prezto:module:git:info:position'  format '%F{magenta}%p%f' # %p
+
+  # RPROMPT
+  zstyle ':prezto:module:git:info:indexed'   format ' %F{green}●%f'   # %i
+  zstyle ':prezto:module:git:info:stashed'   format ' %F{white}%f'   # %S
+  zstyle ':prezto:module:git:info:unindexed' format ' %F{yellow}●%f'  # %I
+  zstyle ':prezto:module:git:info:untracked' format ' %F{red}●%f'     # %u
+
+  # Define git prompts.
+  zstyle ':prezto:module:git:info:keys' format \
+    'prompt'  '$(coalesce "%b" "%p" "%c")%s%B%A ' \
+    'rprompt' '%S%i%I%u'
+
+  # Define zsh prompts.
+  PROMPT='${_prompt_pwd}${git_info:+${(e)git_info[prompt]}}${editor_info[keymap]} '
+  RPROMPT='${VIM:+${_prompt_vim}}${git_info[rprompt]}${KUBECONFIG:+${_prompt_k8s}}'
+}
+
+prompt_setup "$@"
