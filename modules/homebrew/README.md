@@ -12,7 +12,6 @@ Aliases
   - `brewC` cleans outdated brews, including keg-only, and their cached archives.
   - `brewi` installs a formula.
   - `brewl` lists installed formulae.
-  - `brewo` lists brews which have an update available.
   - `brews` searches for a formula.
   - `brewu` updates Homebrew and formulae.
   - `brewx` uninstalls a formula.
@@ -24,7 +23,6 @@ Aliases
   - `caskC` cleans up all cached downloads.
   - `caski` installs a cask.
   - `caskl` lists installed casks.
-  - `casko` lists casks which have an update available.
   - `casks` searches for a cask.
   - `caskx` uninstalls a cask.
 

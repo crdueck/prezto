@@ -1,27 +1,46 @@
 #
 # A simple theme that displays relevant, contextual information.
 #
+# Displays the current git branch and indicates the presence of
+# untracked, modified, and staged files.
+#
+# Displays the current kubernetes cluster context.
+#
 
-# Load dependencies.
-pmodload 'helper'
+pmodload 'helper' # provides 'coalesce'
 
-function prompt_crdueck_pwd {
-  local pwd="${PWD/#$HOME/~}"
-
-  if [[ "$pwd" == (#m)[/~] ]]; then
-    _prompt_crdueck_pwd="$MATCH"
-    unset MATCH
-  else
-    _prompt_crdueck_pwd="${${${${(@j:/:M)${(@s:/:)pwd}##.#?}:h}%/}//\%/%%}/${${pwd:t}//\%/%%}"
+function prompt_k8s {
+  # TODO: run kubectl asynchronously
+  if (( $+commands[kubectl] )); then
+      _prompt_k8s=" %F{white}$(kubectl config current-context) %F{blue}%f"
   fi
 }
 
-function prompt_crdueck_precmd {
+function prompt_pwd {
+  local pwd="${PWD/#$HOME/~}"
+
+  if [[ "$pwd" == (#m)[/~] ]]; then
+    _prompt_pwd="$MATCH"
+    unset MATCH
+  else
+    _prompt_pwd="${${${${(@j:/:M)${(@s:/:)pwd}##.#?}:h}%/}//\%/%%}/${${pwd:t}//\%/%%}"
+  fi
+
+  _prompt_pwd="%F{cyan}${_prompt_pwd}%f "
+}
+
+function prompt_vim {
+    _prompt_vim="%F{cyan}%f"
+}
+
+function prompt_precmd {
   setopt LOCAL_OPTIONS
   unsetopt XTRACE KSH_ARRAYS
 
-  # Format PWD.
-  prompt_crdueck_pwd
+  # Initialize prompt formats.
+  prompt_k8s
+  prompt_pwd
+  prompt_vim
 
   # Get Git repository information.
   if (( $+functions[git-info] )); then
@@ -29,45 +48,45 @@ function prompt_crdueck_precmd {
   fi
 }
 
-function prompt_crdueck_setup {
+function prompt_setup {
   setopt LOCAL_OPTIONS
   unsetopt XTRACE KSH_ARRAYS
   prompt_opts=(cr percent subst)
 
-  # Load required functions.
   autoload -Uz add-zsh-hook
-
-  # Add hook for calling git-info before each command.
-  add-zsh-hook precmd prompt_crdueck_precmd
+  add-zsh-hook precmd prompt_precmd
+  # TODO: update zprezto and use prompt/functions/prompt-pwd
 
   # Set editor-info parameters.
-  zstyle ':prezto:module:editor:info:completing' format '%B%F{red}...%f%b'
-  zstyle ':prezto:module:editor:info:keymap:primary' format ' %B%F{red}»%F{yellow}»%F{green}»%f%b'
-  zstyle ':prezto:module:editor:info:keymap:alternate' format ' %B%F{green}«%F{yellow}«%F{red}«%f%b'
+  zstyle ':prezto:module:editor:info:completing'       format '%F{red}...%f'
+  zstyle ':prezto:module:editor:info:keymap:primary'   format '%f𝝺.'
+  zstyle ':prezto:module:editor:info:keymap:alternate' format '%F{white}𝝺.%f'
 
   # Set git-info parameters.
-  zstyle ':prezto:module:git:info' verbose 'yes'
-  zstyle ':prezto:module:git:info:action' format ':%%B%F{yellow}%s%f%%b'
-  zstyle ':prezto:module:git:info:added' format ' %%B%F{green}+%f%%b'
-  zstyle ':prezto:module:git:info:ahead' format ' %%B%F{yellow}↑%f%%b'
-  zstyle ':prezto:module:git:info:behind' format ' %%B%F{yellow}↓%f%%b'
-  zstyle ':prezto:module:git:info:branch' format ':%F{green}%b%f'
-  zstyle ':prezto:module:git:info:commit' format ':%F{green}%.7c%f'
-  zstyle ':prezto:module:git:info:deleted' format ' %%B%F{red}×%f%%b'
-  zstyle ':prezto:module:git:info:modified' format ' %%B%F{blue}±%f%%b'
-  zstyle ':prezto:module:git:info:position' format ':%F{red}%p%f'
-  zstyle ':prezto:module:git:info:renamed' format ' %%B%F{blue}→%f%%b'
-  zstyle ':prezto:module:git:info:stashed' format ' %%B%F{magenta}🔒%f%%b'
-  zstyle ':prezto:module:git:info:unmerged' format ' %%B%F{yellow}■%f%%b'
-  zstyle ':prezto:module:git:info:untracked' format ' %%B%F{red}●%f%%b'
-  zstyle ':prezto:module:git:info:keys' format \
-    'prompt' ' %F{blue}git%f$(coalesce "%b" "%p" "%c")%s' \
-    'rprompt' '%A%B%S%a%d%m%r%U%u'
+  zstyle ':prezto:module:git:info' verbose 'no'
 
-  # Define prompts.
-  PROMPT='%F{cyan}${_prompt_crdueck_pwd}%f${git_info:+${(e)git_info[prompt]}}${editor_info[keymap]} '
-  RPROMPT='${VIM:+" %B%F{green}VIM%f%b"}${git_info[rprompt]}'
-  SPROMPT='zsh: correct %F{red}%R%f to %F{green}%r%f [nyae]? '
+  # PROMPT
+  zstyle ':prezto:module:git:info:action'    format ':%F{yellow}%s%f' # %s
+  zstyle ':prezto:module:git:info:ahead'     format '%F{yellow}↑%f'   # %A
+  zstyle ':prezto:module:git:info:behind'    format '%F{yellow}↓%f'   # %B
+  zstyle ':prezto:module:git:info:branch'    format '%F{blue}%b%f'    # %b
+  zstyle ':prezto:module:git:info:commit'    format '%F{blue}%.7c%f'  # %c
+  zstyle ':prezto:module:git:info:position'  format '%F{magenta}%p%f' # %p
+
+  # RPROMPT
+  zstyle ':prezto:module:git:info:indexed'   format ' %F{green}●%f'   # %i
+  zstyle ':prezto:module:git:info:stashed'   format ' %F{white}%f'   # %S
+  zstyle ':prezto:module:git:info:unindexed' format ' %F{yellow}●%f'  # %I
+  zstyle ':prezto:module:git:info:untracked' format ' %F{red}●%f'     # %u
+
+  # Define git prompts.
+  zstyle ':prezto:module:git:info:keys' format \
+    'prompt'  '$(coalesce "%b" "%p" "%c")%s%B%A ' \
+    'rprompt' '%S%i%I%u'
+
+  # Define zsh prompts.
+  PROMPT='${_prompt_pwd}${git_info:+${(e)git_info[prompt]}}${editor_info[keymap]} '
+  RPROMPT='${VIM:+${_prompt_vim}}${git_info[rprompt]}${KUBECONFIG:+${_prompt_k8s}}'
 }
 
-prompt_crdueck_setup "$@"
+prompt_setup "$@"

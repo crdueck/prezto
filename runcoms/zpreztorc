@@ -23,7 +23,6 @@ zstyle ':prezto:load' pmodule \
   'pacman' \
   'utility' \
   'completion' \
-  'haskell' \
   'git' \
   'syntax-highlighting' \
   'history-substring-search' \
@@ -35,14 +34,6 @@ zstyle ':prezto:load' pmodule \
 
 # Set the query found color.
 # zstyle ':prezto:module:autosuggestions:color' found ''
-
-#
-# Completions
-#
-
-# Set the entries to ignore in static */etc/hosts* for host completion.
-# zstyle ':prezto:module:completion:*:hosts' etc-host-ignores \
-#   '0.0.0.0' '127.0.0.1'
 
 #
 # Editor
@@ -59,7 +50,7 @@ zstyle ':prezto:module:editor' dot-expansion 'yes'
 #
 
 # Ignore submodules when they are 'dirty', 'untracked', 'all', or 'none'.
-# zstyle ':prezto:module:git:status:ignore' submodules 'all'
+zstyle ':prezto:module:git:status:ignore' submodules 'all'
 
 #
 # History Substring Search
@@ -81,7 +72,7 @@ zstyle ':prezto:module:history-substring-search:color' not-found 'red'
 # Set the prompt theme to load.
 # Setting it to 'random' loads a random theme.
 # Auto set to 'off' on dumb terminals.
-zstyle ':prezto:module:prompt' theme 'cdk'
+zstyle ':prezto:module:prompt' theme 'crdueck'
 
 #
 # SSH
@@ -109,10 +100,6 @@ zstyle ':prezto:module:prompt' theme 'cdk'
 #   'builtin' 'bg=blue' \
 #   'command' 'bg=blue' \
 #   'function' 'bg=blue'
-#
-# Set syntax pattern styles.
-# zstyle ':prezto:module:syntax-highlighting' pattern \
-#   'rm*-rf*' 'fg=white,bold,bg=red'
 
 #
 # Terminal
@@ -126,9 +113,6 @@ zstyle ':prezto:module:prompt' theme 'cdk'
 
 # Set the tab title format.
 # zstyle ':prezto:module:terminal:tab-title' format '%m: %s'
-
-# Set the terminal multiplexer title format.
-# zstyle ':prezto:module:terminal:multiplexer-title' format '%s'
 
 #
 # Tmux
