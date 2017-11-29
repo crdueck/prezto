@@ -53,8 +53,35 @@ function pmodload {
       print "$0: no such module: $pmodule" >&2
       continue
     else
-      if [[ -s "${ZDOTDIR:-$HOME}/.zprezto/modules/$pmodule/init.zsh" ]]; then
-        source "${ZDOTDIR:-$HOME}/.zprezto/modules/$pmodule/init.zsh"
+      locations=(${pmodule_dirs:+${^pmodule_dirs}/$pmodule(-/FN)})
+      if (( ${#locations} > 1 )); then
+        print "$0: conflicting module locations: $locations"
+        continue
+      elif (( ${#locations} < 1 )); then
+        print "$0: no such module: $pmodule"
+        continue
+      fi
+
+      # Grab the full path to this module
+      pmodule_location=${locations[1]}
+
+      # Add functions to $fpath.
+      fpath=(${pmodule_location}/functions(/FN) $fpath)
+
+      function {
+        local pfunction
+
+        # Extended globbing is needed for listing autoloadable function directories.
+        setopt LOCAL_OPTIONS EXTENDED_GLOB
+
+        # Load Prezto functions.
+        for pfunction in ${pmodule_location}/functions/$~pfunction_glob; do
+          autoload -Uz "$pfunction"
+        done
+      }
+
+      if [[ -s "${pmodule_location}/init.zsh" ]]; then
+        source "${pmodule_location}/init.zsh"
       fi
 
       if (( $? == 0 )); then
